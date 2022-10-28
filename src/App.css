@@ -36,3 +36,18 @@
     transform: rotate(360deg);
   }
 }
+
+a{
+  color: black !important;
+  text-decoration: none !important;
+}
+
+.svg:hover{
+
+  transform: translate3d(0px, -1px, 0px);
+
+}
+
+.svg{
+  cursor: pointer;
+}

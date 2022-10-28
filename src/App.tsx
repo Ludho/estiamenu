@@ -1,25 +1,39 @@
-import React from 'react';
-import logo from './logo.svg';
+import { useState } from 'react';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import './App.css';
-
+import Header from './components/Header/Header';
+import Cart from './pages/Cart';
+import Menu from './pages/Menu';
+import { Product } from './utils';
+import { CartCountContext } from './components/utils/Context';
 function App() {
+
+
+
+  const [count, setCount] = useState(0);
+  const [map, setMap] = useState(new Map<String, number>());
+
+  const addCount = (product: Product) => {
+    setCount(count + 1);
+    let amount = 0;
+    if (map.has(JSON.stringify(product))) {
+      amount = map.get(JSON.stringify(product))! + 1;
+    } else {
+      amount += 1;
+    }
+    setMap(map.set(JSON.stringify(product), amount ? amount : 1));
+  }
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <CartCountContext.Provider value={{ count: count, callback: addCount,map:map }}>
+      <Router>
+        <Header></Header>
+        <Routes>
+          <Route path='/' element={<Menu />} />
+          <Route path='/cart' element={<Cart />} />
+        </Routes>
+      </Router>
+    </CartCountContext.Provider>
   );
 }
 
